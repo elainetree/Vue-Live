@@ -1,0 +1,12 @@
+.img {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.img-main {
+  height: 300px;
+}
+
+.img-detail {
+  height: 150px;
+}
