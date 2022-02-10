@@ -50,7 +50,6 @@ const app = createApp({
     },
     checkProdInfo(item) {
       this.tempProd = item;
-      console.log(item);
     }
   }
 });
