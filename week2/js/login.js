@@ -27,7 +27,10 @@ const app = createApp({
         window.location = 'products.html';
       })
       .catch((error)=>{
-        alert(error.data.message);
+        alert(error.data.message +'，請重新輸入');
+        // 登入失敗後清空欄位
+        this.user.username = '';
+        this.user.password = '';
       })
     }
   }
