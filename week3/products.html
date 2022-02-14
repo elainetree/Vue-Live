@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week3：產品列表</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="./style/products.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center my-3 ">
+        <h1 class="mb-0">書籍列表</h1>
+        <div>
+          <button type="button" class="btn btn-primary" @click="openProdModal('addData')">新增書籍資料</button>
+        </div>
+      </div>
+      <table class="table table-hover table-bordered">
+        <thead class="bg-secondary bg-opacity-25 text-secondary">
+          <tr>
+            <th width="5%">序</th>
+            <th width="45%">書名</th>
+            <th width="5%">上架</th>
+            <th width="12%">出版日</th>
+            <th width="12%">類別</th>
+            <th width="6%">庫存</th>
+            <th width="15%">動作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in prodsData" :key="item.id">
+            <td>{{item.num}}</td>
+            <td>{{item.title}}</td>
+            <td>
+              <span class="text-primary" v-if="item.is_enabled">是</span>
+              <span class="text-black-50" v-else>否</span>
+              <!-- 另一種寫法 -->
+              <!-- <span :class="{'text-primary':item.is_enabled, 'text-black-50':!item.is_enabled}">{{item.is_enabled ? '是' : '否'}}</span> -->
+            </td>
+            <td>{{item.published}}</td>
+            <td>{{item.category}}</td>
+            <td>{{item.qty}}</td>
+            <td>
+              <button class="btn btn-outline-success btn-sm me-1" @click="openProdModal('editData', item)">編輯</button>
+              <button class="btn btn-outline-danger btn-sm" @click="openProdModal('deleteData', item)">刪除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- modal -->
+      <div class="modal fade" id="prodModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header text-white" :class="{'bg-primary':isNew, 'bg-success':!isNew}">
+              <h2 class="modal-title h4" id="staticBackdropLabel">{{isNew ? '新增書籍資料' : '編輯書籍資料'}}</h2>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div class="row mb-3">
+                  <label class="col-2 col-lg-1 col-form-label px-0" for="title">書名</label>
+                  <div class="col-10 col-lg-11 ps-0">
+                    <input class="form-control" type="text" name="title" id="title" placeholder="請輸入書名"
+                      v-model.trim="tempProd.title">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="author">作者</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="author" id="author" placeholder="請輸入作者"
+                          v-model.trim="tempProd.author">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="translator">譯者</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="translator" id="translator" placeholder="請輸入譯者"
+                          v-model.trim="tempProd.translator">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="publisher">出版社</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="publisher" id="publisher" placeholder="請輸入出版社"
+                          v-model.trim="tempProd.publisher">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="published">出版日</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="published" id="published"
+                          placeholder="請輸入出版日，格式：0000/00/00" v-model.trim="tempProd.published">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="origin-price">定價</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="number" min="0" name="origin-price" id="origin-price"
+                          placeholder="請輸入定價" v-model.number="tempProd.origin_price">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="price">售價</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="number" min="0" name="price" id="price" placeholder="請輸入售價"
+                          v-model.number="tempProd.price">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="unit">EAN</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="ean" id="unit" placeholder="請輸入 EAN"
+                          v-model.trim="tempProd.unit">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="category">類別</label>
+                      <div class="col-10 ps-0">
+                        <select class="form-select" name="category" id="category" v-model="tempProd.category">
+                          <option value="請選擇類別" selected disabled>請選擇類別</option>
+                          <option value="藝術設計">藝術設計</option>
+                          <option value="文學小說">文學小說</option>
+                          <option value="圖文書">圖文書</option>
+                          <option value="商管財經">商管財經</option>
+                          <option value="人文歷史">人文歷史</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="qty">庫存</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="number" min="0" name="qty" id="qty" placeholder="請輸入庫存數"
+                          v-model.number="tempProd.qty">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <fieldset class="row">
+                      <legend class="col-2 col-form-label px-0">上架</legend>
+                      <div class="col-10 d-flex align-items-center ps-0">
+                        <div class="form-check me-3">
+                          <label class="form-check-label" for="radioYes">是</label>
+                          <input class="form-check-input" type="radio" checked name="is-enabled" id="radioYes"
+                            v-model="tempProd.is_enabled" :value="parseInt(1)">
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label" for="radioNo">否</label>
+                          <input class="form-check-input" type="radio" name="is-enabled" id="radioNo"
+                            v-model="tempProd.is_enabled" :value="parseInt(0)">
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label px-0" for="description">書籍簡介</label>
+                  <div class="col-12 ps-0">
+                    <textarea class="form-control" id="description" rows="3" v-model="tempProd.description"></textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label px-0" for="aboutAuthor">作者簡介</label>
+                  <div class="col-12 ps-0">
+                    <textarea class="form-control" id="aboutAuthor" rows="3" v-model="tempProd.aboutAuthor"></textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label px-0" for="content">目錄</label>
+                  <div class="col-12 ps-0">
+                    <textarea class="form-control" id="content" rows="3" v-model="tempProd.content"></textarea>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="row mb-3">
+                      <label class="col-2 col-form-label px-0" for="imageUrl">書封</label>
+                      <div class="col-10 px-0">
+                        <input class="form-control" type="text" name="imageUrl" id="imageUrl" placeholder="請輸入圖片網址"
+                          v-model="tempProd.imageUrl">
+                      </div>
+                    </div>
+                    <!-- 1.使用陣列方法 Array.isArray() 判斷 imagesUrl 是否為陣列 -->
+                    <div class="row mb-3" v-if="Array.isArray(tempProd.imagesUrl)">
+                      <template v-for="(img,key) in tempProd.imagesUrl" :key="key+'1'">
+                        <label class="col-2 col-form-label px-0 mb-3" for="imagesUrl">內頁{{`${key+1}`}}</label>
+                        <div class="col-10 px-0">
+                          <input class="form-control" type="text" name="imagesUrl" id="imagesUrl" placeholder="請輸入圖片網址"
+                            v-model="tempProd.imagesUrl[key]">
+                        </div>
+                      </template>
+                      <!-- 2.判斷：若 imagesUrl 無內容，或 imagesUrl 裡最後一個元素有值，就出現新增的按鈕，否則出現刪除的按鈕-->
+                      <button type="button" class="btn btn-outline-primary btn-sm" @click="tempProd.imagesUrl.push('')"
+                        v-if="!tempProd.imagesUrl.length || tempProd.imagesUrl[tempProd.imagesUrl.length-1]">新增內頁圖片</button>
+                      <button type="button" class="btn btn-outline-danger btn-sm" @click="tempProd.imagesUrl.pop()"
+                        v-else>刪除內頁圖片</button>
+                    </div>
+                  </div>
+                  <div class="col-lg-8">
+                    <!-- 書封 -->
+                    <img :src="tempProd.imageUrl" alt="" class="img me-1 mb-1">
+                    <!-- 內頁 -->
+                    <template v-for="(img,key) in tempProd.imagesUrl" :key="key+'1'">
+                      <img :src="img" alt="" class="img me-1 mb-1">
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+              <button type="button" class="btn" :class="{'btn-primary':isNew, 'btn-success':!isNew}" @click="updateProd">存檔</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 刪除的 modal -->
+      <div class="modal fade" id="delProdModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="delProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content border-0">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title" id="delProductModalLabel">
+                <span>刪除書籍資料</span>
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              是否刪除
+              <strong class="h4 text-success">{{tempProd.title}}</strong> 商品？ <br> <span class="text-danger">注意：刪除後將無法恢復。</span>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                取消
+              </button>
+              <button type="button" class="btn btn-danger" @click="deleteProd">
+                確認刪除
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- modal End-->
+
+    </div>
+  </div>
+
+  <!-- Axios JS-->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
+    integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
+    crossorigin='anonymous'></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+
+  <script type="module" src="./js/products.js"></script>
+</body>
+
+</html>
