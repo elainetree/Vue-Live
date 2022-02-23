@@ -63,7 +63,7 @@ const app = createApp({
         this.tempProd = {
           imagesUrl: [],
         }
-        this.$refs.prodModal.showModal();
+        this.$refs.prodModalForTag.showModal();
         this.isNew = true;
       }else if(status==='editData'){
         // 如果是「編輯」，就帶入原有資料、把 isNew 變 false。注意：物件傳參考特性，用拷貝才能避免影響到原有的值
@@ -72,7 +72,7 @@ const app = createApp({
         if(!this.tempProd.imagesUrl){
           this.tempProd.imagesUrl = [];
         }
-        this.$refs.prodModal.showModal();
+        this.$refs.prodModalForTag.showModal();
         this.isNew = false;
       }else if(status==='deleteData'){
         // 如果是「刪除」，就帶入原有資料（用於畫面顯示產品名稱）

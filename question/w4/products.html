@@ -58,7 +58,7 @@
       <pagination :pages="pagination" @get-prod="getProds"></pagination>
 
       <!-- modal -->
-      <modal-for-prod ref="prodModal" :temp-prod="tempProd" @get-prod="getProds" :is-new="isNew"></modal-for-prod>
+      <modal-for-prod ref="prodModalForTag" :temp-prod="tempProd" @get-prod="getProds" :is-new="isNew"></modal-for-prod>
       <!-- 刪除的 modal -->
       <div class="modal fade" id="delProdModal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="delProductModalLabel" aria-hidden="true">
