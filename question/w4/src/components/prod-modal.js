@@ -10,8 +10,8 @@ export default {
   props: ['tempProd', 'isNew'],
   template: '#prodModalTemplate',
   mounted() {
-    // 使用 bootstrap 提供的方法，進行 modal 實體化
-    prodModal = new bootstrap.Modal(document.getElementById('prodModal'));
+    // 使用 bootstrap 提供的方法，進行 modal 實體化，並以 refs 取代 getElementById 的方式去取得 DOM
+    prodModal = new bootstrap.Modal(this.$refs.prodModal);
   },
   methods:{
     updateProd(){

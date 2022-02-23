@@ -58,10 +58,7 @@
       <pagination :pages="pagination" @get-prod="getProds"></pagination>
 
       <!-- modal -->
-      <div class="modal fade" id="prodModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <modal-for-prod :temp-prod="tempProd" @get-prod="getProds" :is-new="isNew"></modal-for-prod>
-      </div>
+      <modal-for-prod ref="prodModal" :temp-prod="tempProd" @get-prod="getProds" :is-new="isNew"></modal-for-prod>
       <!-- 刪除的 modal -->
       <div class="modal fade" id="delProdModal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="delProductModalLabel" aria-hidden="true">
@@ -97,198 +94,201 @@
 
   <!-- prod modal 的 x-template -->
   <script type="text/x-template" id="prodModalTemplate">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header text-white" :class="{'bg-primary':isNew, 'bg-success':!isNew}">
-          <h2 class="modal-title h4" id="staticBackdropLabel">{{isNew ? '新增書籍資料' : '編輯書籍資料'}}</h2>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-            aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row mb-3">
-              <label class="col-2 col-lg-1 col-form-label px-0" for="title">書名</label>
-              <div class="col-10 col-lg-11 ps-0">
-                <input class="form-control" type="text" name="title" id="title" placeholder="請輸入書名"
-                  v-model.trim="tempProd.title">
-              </div>
+    <div ref="prodModal" class="modal fade" id="prodModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div ref="innerModal" class="modal-dialog modal-xl modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header text-white" :class="{'bg-primary':isNew, 'bg-success':!isNew}">
+              <h2 class="modal-title h4" id="staticBackdropLabel">{{isNew ? '新增書籍資料' : '編輯書籍資料'}}</h2>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                aria-label="Close"></button>
             </div>
-            <div class="row">
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="author">作者</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="text" name="author" id="author" placeholder="請輸入作者"
-                      v-model.trim="tempProd.author">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="translator">譯者</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="text" name="translator" id="translator" placeholder="請輸入譯者"
-                      v-model.trim="tempProd.translator">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="publisher">出版社</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="text" name="publisher" id="publisher" placeholder="請輸入出版社"
-                      v-model.trim="tempProd.publisher">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="published">出版日</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="text" name="published" id="published"
-                      placeholder="請輸入出版日，格式：0000/00/00" v-model.trim="tempProd.published">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="origin-price">定價</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="number" min="0" name="origin-price" id="origin-price"
-                      placeholder="請輸入定價" v-model.number="tempProd.origin_price">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="price">售價</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="number" min="0" name="price" id="price" placeholder="請輸入售價"
-                      v-model.number="tempProd.price">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="unit">EAN</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="text" name="ean" id="unit" placeholder="請輸入 EAN"
-                      v-model.trim="tempProd.unit">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="category">類別</label>
-                  <div class="col-10 ps-0">
-                    <select class="form-select" name="category" id="category" v-model="tempProd.category">
-                      <option value="請選擇類別" selected disabled>請選擇類別</option>
-                      <option value="藝術設計">藝術設計</option>
-                      <option value="文學小說">文學小說</option>
-                      <option value="圖文書">圖文書</option>
-                      <option value="商管財經">商管財經</option>
-                      <option value="人文社科">人文社科</option>
-                      <option value="自然科普">自然科普</option>
-                      <option value="電腦資訊">電腦資訊</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 mb-3">
-                <div class="row">
-                  <label class="col-2 col-form-label px-0" for="qty">庫存</label>
-                  <div class="col-10 ps-0">
-                    <input class="form-control" type="number" min="0" name="qty" id="qty" placeholder="請輸入庫存數"
-                      v-model.number="tempProd.qty">
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <fieldset class="row">
-                  <legend class="col-2 col-form-label px-0">上架</legend>
-                  <div class="col-10 d-flex align-items-center ps-0">
-                    <div class="form-check me-3">
-                      <label class="form-check-label" for="radioYes">是</label>
-                      <input class="form-check-input" type="radio" checked name="is-enabled" id="radioYes"
-                        v-model="tempProd.is_enabled" :value="parseInt(1)">
-                    </div>
-                    <div class="form-check">
-                      <label class="form-check-label" for="radioNo">否</label>
-                      <input class="form-check-input" type="radio" name="is-enabled" id="radioNo"
-                        v-model="tempProd.is_enabled" :value="parseInt(0)">
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-2 col-form-label px-0" for="description">書籍簡介</label>
-              <div class="col-12 ps-0">
-                <textarea class="form-control" id="description" rows="3" v-model="tempProd.description"></textarea>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-2 col-form-label px-0" for="aboutAuthor">作者簡介</label>
-              <div class="col-12 ps-0">
-                <textarea class="form-control" id="aboutAuthor" rows="3" v-model="tempProd.aboutAuthor"></textarea>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-2 col-form-label px-0" for="content">目錄</label>
-              <div class="col-12 ps-0">
-                <textarea class="form-control" id="content" rows="3" v-model="tempProd.content"></textarea>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4">
+            <div class="modal-body">
+              <div class="container-fluid">
                 <div class="row mb-3">
-                  <label class="col-2 col-form-label px-0" for="imageUrl">書封</label>
-                  <div class="col-10 px-0">
-                    <input class="form-control" type="text" name="imageUrl" id="imageUrl" placeholder="請輸入圖片網址"
-                      v-model="tempProd.imageUrl">
+                  <label class="col-2 col-lg-1 col-form-label px-0" for="title">書名</label>
+                  <div class="col-10 col-lg-11 ps-0">
+                    <input class="form-control" type="text" name="title" id="title" placeholder="請輸入書名"
+                      v-model.trim="tempProd.title">
                   </div>
                 </div>
-                <!-- 1.使用陣列方法 Array.isArray() 判斷 imagesUrl 是否為陣列 -->
-                <div class="row mb-3" v-if="Array.isArray(tempProd.imagesUrl)">
-                  <template v-for="(img,key) in tempProd.imagesUrl" :key="key+'1'">
-                    <label class="col-2 col-form-label px-0 mb-3" for="imagesUrl">內頁{{`${key+1}`}}</label>
-                    <div class="col-10 px-0">
-                      <input class="form-control" type="text" name="imagesUrl" id="imagesUrl" placeholder="請輸入圖片網址"
-                        v-model="tempProd.imagesUrl[key]">
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="author">作者</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="author" id="author" placeholder="請輸入作者"
+                          v-model.trim="tempProd.author">
+                      </div>
                     </div>
-                  </template>
-                  <!-- 2.判斷：若 imagesUrl 無內容，或 imagesUrl 裡最後一個元素有值，就出現新增的按鈕，否則出現刪除的按鈕-->
-                  <button type="button" class="btn btn-outline-primary btn-sm" @click="tempProd.imagesUrl.push('')"
-                    v-if="!tempProd.imagesUrl.length || tempProd.imagesUrl[tempProd.imagesUrl.length-1]">新增內頁圖片</button>
-                  <button type="button" class="btn btn-outline-danger btn-sm" @click="tempProd.imagesUrl.pop()"
-                    v-else>刪除內頁圖片</button>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="translator">譯者</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="translator" id="translator" placeholder="請輸入譯者"
+                          v-model.trim="tempProd.translator">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="publisher">出版社</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="publisher" id="publisher" placeholder="請輸入出版社"
+                          v-model.trim="tempProd.publisher">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="published">出版日</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="published" id="published"
+                          placeholder="請輸入出版日，格式：0000/00/00" v-model.trim="tempProd.published">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="origin-price">定價</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="number" min="0" name="origin-price" id="origin-price"
+                          placeholder="請輸入定價" v-model.number="tempProd.origin_price">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="price">售價</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="number" min="0" name="price" id="price" placeholder="請輸入售價"
+                          v-model.number="tempProd.price">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="unit">EAN</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="text" name="ean" id="unit" placeholder="請輸入 EAN"
+                          v-model.trim="tempProd.unit">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="category">類別</label>
+                      <div class="col-10 ps-0">
+                        <select class="form-select" name="category" id="category" v-model="tempProd.category">
+                          <option value="請選擇類別" selected disabled>請選擇類別</option>
+                          <option value="藝術設計">藝術設計</option>
+                          <option value="文學小說">文學小說</option>
+                          <option value="圖文書">圖文書</option>
+                          <option value="商管財經">商管財經</option>
+                          <option value="人文社科">人文社科</option>
+                          <option value="自然科普">自然科普</option>
+                          <option value="電腦資訊">電腦資訊</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <div class="row">
+                      <label class="col-2 col-form-label px-0" for="qty">庫存</label>
+                      <div class="col-10 ps-0">
+                        <input class="form-control" type="number" min="0" name="qty" id="qty" placeholder="請輸入庫存數"
+                          v-model.number="tempProd.qty">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <fieldset class="row">
+                      <legend class="col-2 col-form-label px-0">上架</legend>
+                      <div class="col-10 d-flex align-items-center ps-0">
+                        <div class="form-check me-3">
+                          <label class="form-check-label" for="radioYes">是</label>
+                          <input class="form-check-input" type="radio" checked name="is-enabled" id="radioYes"
+                            v-model="tempProd.is_enabled" :value="parseInt(1)">
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label" for="radioNo">否</label>
+                          <input class="form-check-input" type="radio" name="is-enabled" id="radioNo"
+                            v-model="tempProd.is_enabled" :value="parseInt(0)">
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label px-0" for="description">書籍簡介</label>
+                  <div class="col-12 ps-0">
+                    <textarea class="form-control" id="description" rows="3" v-model="tempProd.description"></textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label px-0" for="aboutAuthor">作者簡介</label>
+                  <div class="col-12 ps-0">
+                    <textarea class="form-control" id="aboutAuthor" rows="3" v-model="tempProd.aboutAuthor"></textarea>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label px-0" for="content">目錄</label>
+                  <div class="col-12 ps-0">
+                    <textarea class="form-control" id="content" rows="3" v-model="tempProd.content"></textarea>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="row mb-3">
+                      <label class="col-2 col-form-label px-0" for="imageUrl">書封</label>
+                      <div class="col-10 px-0">
+                        <input class="form-control" type="text" name="imageUrl" id="imageUrl" placeholder="請輸入圖片網址"
+                          v-model="tempProd.imageUrl">
+                      </div>
+                    </div>
+                    <!-- 1.使用陣列方法 Array.isArray() 判斷 imagesUrl 是否為陣列 -->
+                    <div class="row mb-3" v-if="Array.isArray(tempProd.imagesUrl)">
+                      <template v-for="(img,key) in tempProd.imagesUrl" :key="key+'1'">
+                        <label class="col-2 col-form-label px-0 mb-3" for="imagesUrl">內頁{{`${key+1}`}}</label>
+                        <div class="col-10 px-0">
+                          <input class="form-control" type="text" name="imagesUrl" id="imagesUrl" placeholder="請輸入圖片網址"
+                            v-model="tempProd.imagesUrl[key]">
+                        </div>
+                      </template>
+                      <!-- 2.判斷：若 imagesUrl 無內容，或 imagesUrl 裡最後一個元素有值，就出現新增的按鈕，否則出現刪除的按鈕-->
+                      <button type="button" class="btn btn-outline-primary btn-sm" @click="tempProd.imagesUrl.push('')"
+                        v-if="!tempProd.imagesUrl.length || tempProd.imagesUrl[tempProd.imagesUrl.length-1]">新增內頁圖片</button>
+                      <button type="button" class="btn btn-outline-danger btn-sm" @click="tempProd.imagesUrl.pop()"
+                        v-else>刪除內頁圖片</button>
+                    </div>
+                  </div>
+                  <div class="col-lg-8">
+                    <!-- 書封 -->
+                    <img :src="tempProd.imageUrl" alt="" class="img me-1 mb-1">
+                    <!-- 內頁 -->
+                    <template v-for="(img,key) in tempProd.imagesUrl" :key="key+'1'">
+                      <img :src="img" alt="" class="img me-1 mb-1">
+                    </template>
+                  </div>
                 </div>
               </div>
-              <div class="col-lg-8">
-                <!-- 書封 -->
-                <img :src="tempProd.imageUrl" alt="" class="img me-1 mb-1">
-                <!-- 內頁 -->
-                <template v-for="(img,key) in tempProd.imagesUrl" :key="key+'1'">
-                  <img :src="img" alt="" class="img me-1 mb-1">
-                </template>
-              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+              <button type="button" class="btn" :class="{'btn-primary':isNew, 'btn-success':!isNew}" @click="updateProd">存檔</button>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
-          <button type="button" class="btn" :class="{'btn-primary':isNew, 'btn-success':!isNew}" @click="updateProd">存檔</button>
-        </div>
       </div>
-    </div>
   </script>
 
   <!-- Axios JS-->
