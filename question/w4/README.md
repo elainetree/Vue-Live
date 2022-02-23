@@ -70,6 +70,7 @@ modal 實體使用 `$refs` 去選取 DOM： `prodModal = new bootstrap.Modal(thi
 ![diagram](https://i.imgur.com/VAjVDYA.png)
 
 prod-modal.js：元件 `mounted()` 時，`this.$refs.prodModal` 取得 x-template 裡 modal 這個 DOM 元素。
+
 products.js：點擊新增或編輯時（aka 觸發 `openProdModal()`），`this.$refs.prodModal` 取得 modalForProd 整包元件內容，包含 data、methods 等資料和函式。
 
 因此，若 `ref` 只加在元件標籤上，當元件 `mounted()` 時無法取得 x-template 裡 modal 的 DOM，才會出現無法讀取 ClassList 屬性的錯誤。若只加在 x-template 的 modal 裡，則無法取用 modalForProd 元件的內容，所以出現無法讀取 showModal 屬性的錯誤。
