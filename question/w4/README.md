@@ -30,9 +30,13 @@ modal 實體使用 `$refs` 去選取 DOM： `prodModal = new bootstrap.Modal(thi
 
 #### step2：
 
-目前的 [HTML 結構](https://github.com/elaineliu7598/Vue-Live/blob/91671a52f3658572fa1a8fdb8f74b68444f2e7d3/question/w4/products.html#L61-L64)，即使在元件標籤加上 `ref` 屬性，在元件 `mounted()` 時會抓不到 DOM 並報錯：「Uncaught TypeError: Cannot read properties of undefined (reading 'ClassList')」，這是因為建 modal 實體時 `this.$refs` 找不到 prodModal 這個 DOM。
+目前的 [HTML 結構](https://github.com/elaineliu7598/Vue-Live/blob/91671a52f3658572fa1a8fdb8f74b68444f2e7d3/question/w4/products.html#L61-L64)，即使在元件標籤加上 `ref` 屬性，在元件 `mounted()` 時會抓不到 DOM 並報錯：「Uncaught TypeError: Cannot read properties of undefined (reading 'ClassList')」，這是因為建 modal 實體時 `this.$refs` 找不到 prodModal 這個 DOM。換句話說：元件標籤在 Vue 實體範圍內，因此元件無法取得 Vue 實體範圍的 `ref`。
 
-因此要把原本包住 `<modal-for-prod>` 的外層 `<div class="modal fade ...略>"` 移到[元件 template 內](https://github.com/elaineliu7598/Vue-Live/blob/91671a52f3658572fa1a8fdb8f74b68444f2e7d3/question/w4/products.html#L99)並加上 `ref` 屬性。
+★ 重點觀念：寫在元件樣板上的 `ref`，只有元件能取得。寫在 Vue 實體範圍的，只有 Vue 實體能取得，元件不能取得 Vue 實體範圍的 `ref`。
+
+再來，依據 [Bootstrap 文件](https://bootstrap5.hexschool.com/docs/5.1/components/modal/#passing-options)說明，調用 `modal.show()` 或 `modal.hide()` 等方法是透過在 `<div class="modal fade ...略>"` 這個 DOM 元素的 class，加上或移除 `.show` 來完成開關的效果。
+
+因此要把原本包住 `<modal-for-prod>` 的外層 `<div class="modal fade ...略>"` 移到[元件 template 內](https://github.com/elaineliu7598/Vue-Live/blob/91671a52f3658572fa1a8fdb8f74b68444f2e7d3/question/w4/products.html#L99)並加上 `ref` 屬性，讓元件裡的 modal 實體可以抓到這個 DOM 去調用 `modal.show()` 或 `modal.hide()`。
 
 ▲ 實作：
 ```html
@@ -50,7 +54,7 @@ modal 實體使用 `$refs` 去選取 DOM： `prodModal = new bootstrap.Modal(thi
 
 ### 學習：refs
 
-1. 在 HTML Elememt 上加 `ref="自訂名稱"`，可透過 `this.$refs.自訂名稱` 取得 DOM 元素。
+1. 在 HTML Element 上加 `ref="自訂名稱"`，可透過 `this.$refs.自訂名稱` 取得 DOM 元素。
 
 2. 在元件標籤上加 `ref="自訂名稱"`，可透過 `this.$refs.自訂名稱` 取得元件資訊、修改元件內容、使用元件函式等。
 
@@ -89,3 +93,8 @@ products.js：點擊新增或編輯時（aka 觸發 `openProdModal()`），`this
     建立 modal 實體時，其實可以維持用 `getElementById` 的方式取 DOM，不一定要使用 `ref` 的方式。如果使用 `getElementById` 就不需在 x-template 的 modal 加 `ref`。
 
     影響 Q1 的關鍵在：元件標籤要加 `ref`，以及 step2 提到的 HTML 結構，解決這兩點，就可以透過 `this.$refs` 去呼叫函式。
+
+## References
+1. 六角學院 - Vue 直播班助教：Jay
+2. 六角學院 - Vue 直播班影音：操作 DOM 元素技巧 refs
+3. [Vue 官方文件](https://vuejs.org/guide/essentials/template-refs.html)
