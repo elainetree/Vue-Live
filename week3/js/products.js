@@ -12,6 +12,7 @@ const app = createApp({
       prodsData: [],
       tempProd: {
         imagesUrl: [],
+        is_enabled: 1,
       },
       isNew: true, // 判斷 modal 是「新增(true)」或「編輯(false)」，可先隨意給個預設值
     }
