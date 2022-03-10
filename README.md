@@ -6,6 +6,7 @@
 - [week3：熟練 Vue.js](#week3熟練-vuejs)
 - [week4：元件化](#week4元件化)
 - [week5：進階語法介紹](#week5進階語法介紹)
+- [week6：Vue Cli、Vue Router](#week6vue-clivue-router)
 
 ## week1：從函式拆解認識設計模式
 * Demo：https://elaineliu7598.github.io/Vue-Live/week1/
@@ -84,3 +85,21 @@
     * 送出訂單後，購物車須清空
     * 相同產品在購物車內需累加數量，而非另開項目
     * 購物車無產品時不能送出訂單
+
+## week6：Vue Cli、Vue Router
+* Demo：https://elaineliu7598.github.io/Vue-Live/week6/dist/#/
+* 學習：
+  * Vue Cli
+    * 環境安裝、專案建立
+    * 外部套件引入
+    * 環境變數基礎概念
+    * 編譯與部署
+  * Vue Router
+    * 路由基礎概念
+    * 路由運作結構
+* 任務：
+  * 使用 Vue Cli 完成路由設定，包含：
+    * 前台：首頁、產品列表、產品細節頁、購物車
+    * 後台：登入頁、產品列表
+  * 在 Vue Cli 中完成前台購物車表單驗證、後台登入表單驗證
+  * 建立 `.env` 檔案
