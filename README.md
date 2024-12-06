@@ -9,7 +9,7 @@
 - [week6：Vue Cli、Vue Router](#week6vue-clivue-router)
 
 ## week1：從函式拆解認識設計模式
-* Demo：https://elaineliu7598.github.io/Vue-Live/week1/
+* Demo：https://elainetree.github.io/Vue-Live/week1/
 * 使用課程版型
 * 學習：
     * Vue 初始化
@@ -20,7 +20,7 @@
     * 使用者可以點擊單一產品，查看詳細資訊
 
 ## week2：RESTful API 串接
-* Demo：https://elaineliu7598.github.io/Vue-Live/week2/login.html
+* Demo：https://elainetree.github.io/Vue-Live/week2/login.html
 * 學習：
     * Vue 的運作
     * Promise
@@ -34,7 +34,7 @@
     * 使用者可以點擊單一產品，查看詳細資訊
 
 ## week3：熟練 Vue.js
-* Demo：https://elaineliu7598.github.io/Vue-Live/week3/login.html
+* Demo：https://elainetree.github.io/Vue-Live/week3/login.html
 * 學習：
     * 熟悉 Vue.js 的各項語法及指令
     * 物件傳參考
@@ -45,7 +45,7 @@
     * 不使用 Bootstrap 資料屬性，改用 JavaScript 開啟 modal
 
 ## week4：元件化
-* Demo：https://elaineliu7598.github.io/Vue-Live/week4/login.html
+* Demo：https://elainetree.github.io/Vue-Live/week4/login.html
 * 學習：
   * 元件註冊：全域、區域、模組化
   * 元件樣板：template、x-template
@@ -87,7 +87,7 @@
     * 購物車無產品時不能送出訂單
 
 ## week6：Vue Cli、Vue Router
-* Demo：https://elaineliu7598.github.io/Vue-Live/week6/dist/#/
+* Demo：https://elainetree.github.io/Vue-Live/week6/dist/#/
 * 學習：
   * Vue Cli
     * 環境安裝、專案建立
